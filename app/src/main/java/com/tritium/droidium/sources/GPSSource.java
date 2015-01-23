@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.tritium.droidium.R;
 import com.tritium.droidium.datastream.DataEncoder;
+import com.tritium.droidium.runcontrol.Run;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by kwierman on 1/14/15.
+ * GPS Source is to be used for location finding service integration into dat acquisitions.
  */
 public class GPSSource implements Source, LocationListener {
 
@@ -40,12 +42,12 @@ public class GPSSource implements Source, LocationListener {
     }
 
     @Override
-    public void OnPreRun(Context txt) {
+    public void OnPreRun(Context txt, Run run) {
 
     }
 
     @Override
-    public void OnPostRun(Context txt) {
+    public void OnPostRun(Context txt, Run run) {
 
     }
 

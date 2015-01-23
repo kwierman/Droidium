@@ -2,19 +2,11 @@ package com.tritium.droidium.runcontrol;
 
 import com.tritium.droidium.outputs.Output;
 import com.tritium.droidium.sources.Source;
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.util.LogPrinter;
-
-import com.tritium.droidium.datastream.DataEncoder;
-//import com.tritium.droidium.datastream.DataRecord;
-//import com.tritium.droidium.outputs.DataViewOutput;
-import com.tritium.droidium.outputs.Output;
-//import com.tritium.droidium.plotting.Plot;
-import com.tritium.droidium.sources.Source;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,6 +30,8 @@ import javax.xml.transform.stream.StreamResult;
  * Created by kwierman on 1/14/15.
  */
 public class Run extends Thread {
+
+    static final String TAG = "RUNTHREAD";
 
     private ArrayList<Source> fSources;
     private ArrayList<Output> fOutputs;
@@ -140,7 +134,7 @@ public class Run extends Thread {
      */
     @Override
     public void run() {
-        Log.d("Run", this.toDocString() );
+        Log.d(TAG, this.toDocString() );
         Looper.prepare();
 
         runStartHandler = new Handler(){
@@ -172,34 +166,32 @@ public class Run extends Thread {
         //this loops over the
 
         for(Source s : fSources){
-            s.OnPreRun(context);
+            s.OnPreRun(context,this);
         }
         for(Output o: fOutputs){
             o.OnPreRun(context);
         }
 
         startTime.setToNow();
-        Log.d("Run","Run Starting at: "+startTime.toMillis(true));
+        Log.d(TAG,"Run Starting at: "+startTime.toMillis(true));
         //setup the run start notifier
         Looper.loop();
         stopTime.setToNow();
 
         for(Source s : fSources){
-            s.OnPostRun(context);
+            s.OnPostRun(context,this);
         }
         for(Output o : fOutputs){
             o.OnPostRun(context);
         }
-        Log.d("Run","Run Ending at: "+stopTime.toMillis(true));
+        Log.d(TAG,"Run Ending at: "+stopTime.toMillis(true));
         //setup the run stop notifier
         runStopCallback.sendEmptyMessage(0);
     }
 
 
     public void publish(byte[] rec){
-        for(Output o : fOutputs){
-            o.Publish(rec);
-        }
+        for(Output o : fOutputs) o.Publish(rec);
     }
 
     public Handler getIncomingDataHandler(){
@@ -240,6 +232,4 @@ public class Run extends Thread {
     public void setRunStopCallback(Handler callback){
         runStopCallback = callback;
     }
-
-
 }

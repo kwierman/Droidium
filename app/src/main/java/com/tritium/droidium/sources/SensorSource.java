@@ -6,28 +6,24 @@ package com.tritium.droidium.sources;
 
         import com.tritium.droidium.R;
         import com.tritium.droidium.datastream.DataEncoder;
+        import com.tritium.droidium.runcontrol.Run;
         import com.tritium.droidium.runcontrol.RunManager;
 
         import android.hardware.SensorEvent;
         import android.hardware.SensorEventListener;
         import android.hardware.SensorManager;
-        import android.os.Bundle;
         import android.os.Message;
-        import android.text.format.Time;
-        import android.util.Log;
 
         import org.w3c.dom.Document;
         import org.w3c.dom.Element;
-        import org.w3c.dom.Node;
 
-        import java.nio.ByteBuffer;
         import java.util.ArrayList;
         import java.util.List;
-        import java.util.zip.DataFormatException;
         import android.os.Handler;
 
 /**
  * Created by kwierman on 9/23/14.
+ * To be used as sensor data sourcing for data acquisitions.
  */
 public class SensorSource implements Source, SensorEventListener{
     private final Sensor device;
@@ -49,10 +45,10 @@ public class SensorSource implements Source, SensorEventListener{
 
         //setup the encoder
         accuracyChangedEncoder = run.createNewEncoder(dev.getName()+"_onAccuracyChanged");
-        accuracyChangedEncoder.add( (int)0, "i" );
-        accuracyChangedEncoder.add( (int)0, "version" );
-        accuracyChangedEncoder.add( (int)0 ,"min_delay");
-        accuracyChangedEncoder.add( (int)0 ,"type");
+        accuracyChangedEncoder.add( 0, "i" );
+        accuracyChangedEncoder.add( 0, "version" );
+        accuracyChangedEncoder.add( 0 ,"min_delay");
+        accuracyChangedEncoder.add( 0 ,"type");
         accuracyChangedEncoder.add( (float)0 ,"max_range");
         accuracyChangedEncoder.add( (float)0 ,"power");
         accuracyChangedEncoder.add( (float)0 ,"resolution");
@@ -61,10 +57,10 @@ public class SensorSource implements Source, SensorEventListener{
     }
 
         //to allow for copying.
-    private SensorSource(Sensor dev){
-        this.device=dev;
+    //private SensorSource(Sensor dev){
+    //    this.device=dev;
 
-    }
+    //}
 
     @Override
     public boolean equals(Object object) {
@@ -79,15 +75,16 @@ public class SensorSource implements Source, SensorEventListener{
 
 
     @Override //from Source
-    public void OnPreRun(Context txt) {
+    public void OnPreRun(Context txt, Run run) {
         //connect the listener
         //TODO: Get The incoming data handler
+        handle = run.getIncomingDataHandler();
         SensorManager man = (SensorManager) txt.getSystemService(Context.SENSOR_SERVICE);
         man.registerListener(this, device, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override //from Source
-    public void OnPostRun(Context txt) {
+    public void OnPostRun(Context txt, Run run) {
         handle=null;
         SensorManager man = (SensorManager) txt.getSystemService(Context.SENSOR_SERVICE);
         man.unregisterListener(this, device);
