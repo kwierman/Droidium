@@ -1,0 +1,15 @@
+<resources>
+    <declare-styleable name="PlotView">
+        <attr name="nPoints" format="integer" />
+        <attr name="nXDivisions" format="integer" />
+        <attr name="nYDivisions" format="integer" />
+        <attr name="xAxisLabelSize" format="dimension"/>
+        <attr name="yAxisLabelSize" format="dimension"/>
+        <attr name="plot_title" format="string"/>
+        <attr name="xAxisTitle" format="string"/>
+        <attr name="yAxisTitle" format="string"/>
+        <attr name="numeric_precision" format="integer"/>
+
+
+    </declare-styleable>
+</resources>
