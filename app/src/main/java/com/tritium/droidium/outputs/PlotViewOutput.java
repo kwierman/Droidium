@@ -2,6 +2,7 @@ package com.tritium.droidium.outputs;
 
 import android.content.Context;
 
+import com.tritium.droidium.R;
 import com.tritium.droidium.datastream.DataEncoder;
 
 import org.w3c.dom.Document;
@@ -40,11 +41,14 @@ public class PlotViewOutput implements Output {
 
     @Override
     public String getDesc() {
-        return null;
+        if(mEncoder!=null){
+            return "Attached to: "+Integer.toString(mEncoder.getID());
+        }
+        return "Unattached";
     }
 
     @Override
     public int getImage() {
-        return 0;
+        return R.drawable.ic_plot;
     }
 }
