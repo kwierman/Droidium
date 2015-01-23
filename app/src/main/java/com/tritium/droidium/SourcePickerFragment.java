@@ -117,10 +117,13 @@ public class SourcePickerFragment extends Fragment implements AbsListView.OnItem
                 return;
             }
             RunManager rc = (RunManager)getActivity().getApplication();
+
             if( mAdapter.select(position) ){
+                Log.d(TAG, "Adding Source"+host.getName() );
                 rc.getCurrentRun().addSource(((SourceController) host).getSource());
             }
             else{
+                Log.d(TAG, "Removing Source"+host.getName() );
                 rc.getCurrentRun().removeSource(((SourceController) host).getSource());
             }
         }

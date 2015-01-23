@@ -207,13 +207,18 @@ public class Run extends Thread {
 
     //Source manipulation
     public void addSource(Source src){
-        if(!hasSource(src))
+        if(!hasSource(src)) {
             this.fSources.add(src);
+            Log.d(TAG, "Adding Source: "+src.getName() );
+        }
     }
 
     public void removeSource(Source src){
-        this.fSources.remove(src);
+
+        boolean remove = this.fSources.remove(src);
+        Log.d(TAG,"Removing source: "+src.getName());
     }
+
 
     public boolean hasOutput(Output out){
         return fOutputs.contains(out);

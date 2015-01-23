@@ -2,6 +2,7 @@ package com.tritium.droidium.itemizedlist;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import java.util.List;
  * Created by kwierman on 9/23/14.
  */
 public class ItemizedAdapter extends ArrayAdapter<ItemizedAdapter.ListItem >{
+
+    static final String TAG="ITEMIZEDADAPTER";
+
     private LayoutInflater mInflater;
 
     public interface HostType{
@@ -118,10 +122,15 @@ public class ItemizedAdapter extends ArrayAdapter<ItemizedAdapter.ListItem >{
             return view;
         }
         @Override
-        public boolean isSelected(){return false;}
+        public boolean isSelected(){return this.selected;}
         @Override
         public void flipSelect(){
-            this.selected= !this.selected;
+            Log.d(TAG, "In item interior Flipping selected: "+Boolean.toString(this.selected) );
+            if(this.selected)
+                this.selected=false;
+            else
+                this.selected=true;
+            Log.d(TAG, "In item interior Flipping selected: "+Boolean.toString(this.selected) );
         }
     }
 
@@ -175,8 +184,11 @@ public class ItemizedAdapter extends ArrayAdapter<ItemizedAdapter.ListItem >{
 
     public boolean select(int position){
         ListItem it = getItem(position);
+        Log.d(TAG,"selecting item at: "+Integer.toString(position));
+        Log.d(TAG, "Item Selected: "+Boolean.toString(it.isSelected()));
         it.flipSelect();
-        return !it.isSelected();
+        Log.d(TAG, "Item Selected: "+Boolean.toString(it.isSelected()));
+        return it.isSelected();
     }
 
 }
